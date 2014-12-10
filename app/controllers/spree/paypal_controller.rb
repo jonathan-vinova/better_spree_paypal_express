@@ -38,7 +38,7 @@ module Spree
           redirect_to provider.express_checkout_url(pp_response, :useraction => 'commit')
         else
           flash[:error] = Spree.t('flash.generic_error', :scope => 'paypal', :reasons => pp_response.errors.map(&:long_message).join(" "))
-          redirect_to checkout_state_path(:payment)
+          redirect_to express_checkout_urlt_state_path(:payment)
         end
       rescue SocketError
         flash[:error] = Spree.t('flash.connection_failed', :scope => 'paypal')
@@ -209,7 +209,7 @@ module Spree
     def api_express_checkout_request_details order, items
       { :SetExpressCheckoutRequestDetails => {
           :InvoiceID => order.number,
-          :ReturnURL => api_confirm_paypal_url(:payment_method_id => params[:payment_method_id], :utm_nooverride => 1123123),
+          :ReturnURL => api_confirm_paypal_url(:order_number => params[:order_number], :payment_method_id => params[:payment_method_id], :utm_nooverride => 1123123),
           :CancelURL =>  api_cancel_paypal_url,
           :SolutionType => payment_method.preferred_solution.present? ? payment_method.preferred_solution : "Mark",
           :LandingPage => payment_method.preferred_landing_page.present? ? payment_method.preferred_landing_page : "Billing",
