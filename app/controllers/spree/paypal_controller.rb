@@ -151,18 +151,18 @@ module Spree
         flash.notice = Spree.t(:order_processed_successfully)
         flash[:commerce_tracking] = "nothing special"
         session[:order_id] = nil
-        # redirect_to completion_route(order)
+        redirect_to completion_route(order)
 
-        render :status => 200,
-           :json => { :success => true,
-                      :info => "Finish paypal payment",
-                      :data => {} }
+        # render :status => 200,
+        #    :json => { :success => true,
+        #               :info => "Finish paypal payment",
+        #               :data => {} }
       else
-        # redirect_to checkout_state_path(order.state)
-        render :status => 401,
-           :json => { :success => false,
-                      :info => "Order data is not completed.",
-                      :data => {} }
+        redirect_to checkout_state_path(order.state)
+        # render :status => 401,
+        #    :json => { :success => false,
+        #               :info => "Order data is not completed.",
+        #               :data => {} }
       end
     end
 
