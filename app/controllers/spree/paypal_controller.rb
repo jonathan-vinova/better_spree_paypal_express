@@ -136,7 +136,8 @@ module Spree
     end
 
     def api_confirm
-      order = current_order || raise(ActiveRecord::RecordNotFound)
+      @curr_order = Spree::Order.where(number: params[:order_number]).first
+      order = @curr_order || raise(ActiveRecord::RecordNotFound)
       order.payments.create!({
         :source => Spree::PaypalExpressCheckout.create({
           :token => params[:token],
@@ -208,7 +209,7 @@ module Spree
     def api_express_checkout_request_details order, items
       { :SetExpressCheckoutRequestDetails => {
           :InvoiceID => order.number,
-          :ReturnURL => api_confirm_paypal_url(:payment_method_id => params[:payment_method_id], :utm_nooverride => 1),
+          :ReturnURL => api_confirm_paypal_url(:payment_method_id => params[:payment_method_id], :utm_nooverride => 1, :order_number => order.number),
           :CancelURL =>  api_cancel_paypal_url,
           :SolutionType => payment_method.preferred_solution.present? ? payment_method.preferred_solution : "Mark",
           :LandingPage => payment_method.preferred_landing_page.present? ? payment_method.preferred_landing_page : "Billing",
