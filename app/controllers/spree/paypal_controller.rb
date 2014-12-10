@@ -209,7 +209,7 @@ module Spree
     def api_express_checkout_request_details order, items
       { :SetExpressCheckoutRequestDetails => {
           :InvoiceID => order.number,
-          :ReturnURL => api_confirm_paypal_url(:payment_method_id => params[:payment_method_id], :utm_nooverride => 1, :order_number => order.number),
+          :ReturnURL => api_confirm_paypal_url(:order_number => params[:order_number], :payment_method_id => params[:payment_method_id], :utm_nooverride => 1),
           :CancelURL =>  api_cancel_paypal_url,
           :SolutionType => payment_method.preferred_solution.present? ? payment_method.preferred_solution : "Mark",
           :LandingPage => payment_method.preferred_landing_page.present? ? payment_method.preferred_landing_page : "Billing",
