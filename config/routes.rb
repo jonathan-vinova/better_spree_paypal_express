@@ -1,6 +1,9 @@
 Spree::Core::Engine.add_routes do
   post '/paypal', :to => "paypal#express", :as => :paypal_express
+  post 'api/paypal', :to => "paypal#api_express", :as => :api_paypal_express
+  get 'api/paypal/confirm', :to => "paypal#api_confirm", :as => :api_confirm_paypal
   get '/paypal/confirm', :to => "paypal#confirm", :as => :confirm_paypal
+  get 'api/paypal/cancel', :to => "paypal#api_cancel", :as => :api_cancel_paypal
   get '/paypal/cancel', :to => "paypal#cancel", :as => :cancel_paypal
   get '/paypal/notify', :to => "paypal#notify", :as => :notify_paypal
 
