@@ -83,7 +83,7 @@ module Spree
                       :info => "Paypal payment created",
                       :data => {
                         :ec_token => pp_response.Token,
-                        :sanbox_url => "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=" + pp_response.Token + "&useraction=commit",
+                        :sandbox_url => "https://www.sandbox.paypal.com/webscr?cmd=_express-checkout&token=" + pp_response.Token + "&useraction=commit",
                         :production_url => "https://www.paypal.com/webscr?cmd=_express-checkout&token=" + pp_response.Token + "&useraction=commit"
                         } }
           # render json: pp_response
