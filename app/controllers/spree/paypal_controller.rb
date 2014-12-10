@@ -160,16 +160,21 @@ module Spree
       else
         # redirect_to checkout_state_path(order.state)
         render :status => 401,
-           :json => { :success => true,
-                      :info => "Paypal payment problem",
+           :json => { :success => false,
+                      :info => "Order data is not completed.",
                       :data => {} }
       end
     end
 
     def api_cancel
       flash[:notice] = Spree.t('flash.cancel', :scope => 'paypal')
+      @curr_order = Spree::Order.where(number: params[:order_number]).first
       order = current_order || raise(ActiveRecord::RecordNotFound)
-      redirect_to checkout_state_path(order.state, paypal_cancel_token: params[:token])
+      render :status => 401,
+           :json => { :success => false,
+                      :info => "Paypal payment cancelled",
+                      :data => {} }
+      # redirect_to checkout_state_path(order.state, paypal_cancel_token: params[:token])
     end
 
     def cancel
@@ -210,7 +215,7 @@ module Spree
       { :SetExpressCheckoutRequestDetails => {
           :InvoiceID => order.number,
           :ReturnURL => api_confirm_paypal_url(:order_number => params[:order_number], :payment_method_id => params[:payment_method_id], :utm_nooverride => 1123123),
-          :CancelURL =>  api_cancel_paypal_url,
+          :CancelURL =>  api_cancel_paypal_url(:order_number => params[:order_number]),
           :SolutionType => payment_method.preferred_solution.present? ? payment_method.preferred_solution : "Mark",
           :LandingPage => payment_method.preferred_landing_page.present? ? payment_method.preferred_landing_page : "Billing",
           :cppheaderimage => payment_method.preferred_logourl.present? ? payment_method.preferred_logourl : "",
